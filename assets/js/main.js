@@ -1,33 +1,56 @@
 const list = document.querySelector(".tasks");
+const inputTask = document.querySelector(".input-new-task");
 
-function createItem() {
-  const item = document.createElement("li");
+function CreateLi() {
+  const li = document.createElement("li");
 
-  return item;
+  return li;
 }
 
-function setItem(task) {
-  const item = createItem();
+function createTask(task) {
+  const li = CreateLi();
 
-  item.innerHTML = task;
-  list.appendChild(item);
+  li.innerHTML = task;
+  list.appendChild(li);
+  clearInput();
+  inputTask.focus();
+  createRmvBtn(li);
 }
 
-function createRmvBtn(){
-    const btn = document.createElement('button');
-    btn.innerHTML = 'remove';
-
-    list.appendChild(btn);
+function removeTask(element) {
+  const remove = document.querySelector("btn-rm");
+  element.parentElement.remove();
 }
 
+function createRmvBtn(li) {
+  
+  const btn = document.createElement("button");
+  btn.innerText = "Remove";
+  btn.classList.add = "btn-rm";
+  btn.setAttribute('class', 'btn-rm')
+
+  li.appendChild(btn);
+}
+
+inputTask.addEventListener("keypress", function (e) {
+  if (e.keyCode === 13) {
+    if (!inputTask.value) return;
+    createTask(inputTask.value);
+  }
+});
+
+function clearInput() {
+  inputTask.value = "";
+}
 
 document.addEventListener("click", function (e) {
   const el = e.target;
-  const inputTask = document.querySelector(".input-new-task");
-  const task = inputTask.value;
 
-  if (el.classList.contains("btn-add-task")) {
-    setItem(task);
-    createRmvBtn();
+  if (el.classList.contains("btn-add-task") && inputTask.value) {
+    createTask(inputTask.value);
+    clearInput();
+  }
+  if (el.classList.contains("btn-rm")) {
+    removeTask(el);
   }
 });
