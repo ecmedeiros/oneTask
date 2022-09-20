@@ -1,4 +1,4 @@
-const list = document.querySelector(".tasks");
+const tasks = document.querySelector(".tasks");
 const inputTask = document.querySelector(".input-new-task");
 
 function CreateLi() {
@@ -11,23 +11,23 @@ function createTask(task) {
   const li = CreateLi();
 
   li.innerHTML = task;
-  list.appendChild(li);
+  tasks.appendChild(li);
   clearInput();
   inputTask.focus();
   createRmvBtn(li);
+  saveTask();
 }
 
 function removeTask(element) {
-  const remove = document.querySelector("btn-rm");
   element.parentElement.remove();
+  saveTask();
 }
 
 function createRmvBtn(li) {
-  
   const btn = document.createElement("button");
   btn.innerText = "Remove";
   btn.classList.add = "btn-rm";
-  btn.setAttribute('class', 'btn-rm')
+  btn.setAttribute("class", "btn-rm");
 
   li.appendChild(btn);
 }
@@ -54,3 +54,29 @@ document.addEventListener("click", function (e) {
     removeTask(el);
   }
 });
+
+function saveTask() {
+  const liTask = tasks.querySelectorAll('li');
+  
+  const listOfTasks = [];
+
+  for (let tasks of liTask) {
+    let textTask = tasks.innerText;
+     textTask = textTask.replace('Remove', '').trim();
+     listOfTasks.push(textTask);
+  }
+
+  const tarefasJSON = JSON.stringify(listOfTasks);
+  localStorage.setItem('tasks', tarefasJSON);
+}
+
+function pullSavedTasks() {
+  const tasks = localStorage.getItem('tasks');
+  const listOfTasks = JSON.parse(tasks);
+
+  for ( let tasks of listOfTasks){
+    createTask(tasks);
+  }
+}
+
+pullSavedTasks()
